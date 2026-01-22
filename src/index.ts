@@ -1,9 +1,10 @@
 import { randomUUID } from "node:crypto";
-import { dispathProdutos } from "./broker/producers/produtos-producer.ts";
-import dbConn, { PUBLICO } from "./connection/database-connection.ts";
+import dbConn  from "./connection/database-connection.ts";
 import { type eventos_produtos_sistema } from "./interfaces/eventos_produtos_sistema.ts";
-import {type eventos_clientes_sistema } from "./interfaces/eventos_clientes_sistema.ts";
+import { connectRabbitMQ } from "./broker/broker-connection.ts";
+import { dispathExchangeProdutos } from "./broker/producers/produtos-producer.ts";
 
+ connectRabbitMQ()
 
     const eventos = process.env.EVENTOS
 
@@ -17,7 +18,7 @@ import {type eventos_clientes_sistema } from "./interfaces/eventos_clientes_sist
            
           for(const i of data ){
                const id_message = randomUUID() as string;
-                const resultMsg =  await dispathProdutos({
+                const resultMsg =  await dispathExchangeProdutos({
                          id_message: id_message,
                          criado_em: i.criado_em,
                          dados_json:'',
