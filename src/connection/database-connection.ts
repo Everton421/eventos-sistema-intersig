@@ -12,8 +12,9 @@ const DB_CONFIG = {
                       password: process.env.PASSWORD,
                       connectionLimit: 10
                     };
- 
+   export  const databaseEventos = `\`${process.env.EVENTOS}\``;
 
-export const dbConn = await mysql.createPool(DB_CONFIG);
+
+ const dbConn = await mysql.createPool(DB_CONFIG);
      
 export default dbConn;

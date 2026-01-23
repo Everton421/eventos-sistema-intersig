@@ -14,12 +14,14 @@ export async function connectRabbitMQ(): Promise<void> {
         connection = await amqplib.connect(URL);
         pubChannel = await connection.createChannel();
 
-
+        
         await Promise.all([
                pubChannel.assertExchange('clientes', 'fanout', { durable: true }),
-               pubChannel.assertExchange('produtos', 'fanout', { durable: true }) 
+               pubChannel.assertExchange('produtos', 'fanout', { durable: true }), 
+               pubChannel.assertExchange('recebimentos', 'fanout', { durable: true }) ,
+               pubChannel.assertExchange('pedidos', 'fanout', { durable: true }) 
+            
         ])
-
         console.log("✅ [RabbitMQ] Conectado e Exchange configurada!");
 
         connection.on('error', (err) => {
@@ -40,12 +42,11 @@ export async function connectRabbitMQ(): Promise<void> {
 }
 
 // Função exportada para publicar mensagens
-export async function publishExchangeMessage( exchange: 'clientes' | 'produtos' , routingKey: string, data: any): Promise<boolean> {
+export async function publishExchangeMessage( exchange: string , routingKey: string, data: any): Promise<boolean> {
     if (!pubChannel || !connection) {
         console.warn("⚠️ [RabbitMQ] Sem conexão ativa. Mensagem não enviada.");
         return false;
     }
-
     try {
         const buffer = Buffer.from(JSON.stringify(data));
         return pubChannel.publish(exchange, routingKey, buffer);
@@ -55,22 +56,5 @@ export async function publishExchangeMessage( exchange: 'clientes' | 'produtos' 
     }
 }
 
-
-export async function publishMessage( queue: 'clientes' | 'produtos',  data: any): Promise<boolean> {
-    if (!pubChannel || !connection) {
-        console.warn("⚠️ [RabbitMQ] Sem conexão ativa. Mensagem não enviada.");
-        return false;
-    }
-               await pubChannel.assertQueue('produtos',  { durable: true }) 
-
-    try {
-
-        const buffer = Buffer.from(JSON.stringify(data));
-          return pubChannel.sendToQueue(queue,  buffer);
-    } catch (error) {
-        console.error("❌ [RabbitMQ] Erro ao tentar publicar:", error);
-        return false;
-    }
-}
-
+ 
 

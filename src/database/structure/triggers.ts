@@ -1,9 +1,10 @@
-import { ESTOQUE, PUBLICO, VENDAS } from "../../connection/database-connection.ts";
+import { ESTOQUE, FINANCEIRO, PUBLICO, VENDAS } from "../../connection/database-connection.ts";
 
 const databaseEventos = `\`${process.env.EVENTOS}\``;
 const publico = `\`${PUBLICO}\``;
 const vendas = `\`${VENDAS}\``;
 const estoque = `\`${ESTOQUE}\``;
+const financeiro = `\`${FINANCEIRO}\``
 
 export const sqlTriggers = [
       `
@@ -152,5 +153,95 @@ export const sqlTriggers = [
         BEGIN
             INSERT INTO ${databaseEventos}.eventos_clientes_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_clie', OLD.CODIGO, 'DELETE', 'PENDENTE');
+        END`,
+
+
+    /// trigger recebimentos
+     `
+      DROP TRIGGER IF EXISTS ${financeiro}.trg_ct_receb_update;
+     `,
+ `CREATE TRIGGER ${financeiro}.trg_ct_receb_update
+        AFTER UPDATE ON ${financeiro}.ct_receb
+        FOR EACH ROW
+        BEGIN
+            IF (
+              OLD.VENCIMENTO != NEW.VENCIMENTO
+              OR OLD.HISTORICO != NEW.HISTORICO
+              OR OLD.DATA_PGTO != NEW.DATA_PGTO
+              OR OLD.TIPO_RECEBIMENTO != NEW.TIPO_RECEBIMENTO
+              OR OLD.PARCIAL != NEW.PARCIAL
+              OR OLD.AGRUP_ORIGEM != NEW.AGRUP_ORIGEM
+              OR OLD.AGRUP_DESTINO != NEW.AGRUP_DESTINO
+              ) THEN
+                INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                VALUES ('ct_receb', NEW.CODIGO, 'UPDATE', 'PENDENTE');
+            END IF;
+        END`,
+        `
+        DROP TRIGGER IF EXISTS ${financeiro}.trg_ct_receb_insert;
+        `,
+    `CREATE TRIGGER ${financeiro}.trg_ct_receb_insert
+        AFTER INSERT ON ${financeiro}.ct_receb
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('ct_receb', NEW.CODIGO, 'INSERT', 'PENDENTE');
+        END`,
+
+        `
+        DROP TRIGGER IF EXISTS ${financeiro}.trg_ct_receb_delete;
+        `,
+       
+    `CREATE TRIGGER ${financeiro}.trg_ct_receb_delete
+        AFTER DELETE ON ${financeiro}.ct_receb
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('ct_receb', OLD.CODIGO, 'DELETE', 'PENDENTE');
+        END`,
+
+// pedidos  
+    `  DROP TRIGGER IF EXISTS ${vendas}.trg_pedidos_update;`,
+ `CREATE TRIGGER ${vendas}.trg_pedidos_update
+        AFTER UPDATE ON ${vendas}.cad_orca
+        FOR EACH ROW
+        BEGIN
+            IF (
+              OLD.CLIENTE != NEW.CLIENTE
+              OR OLD.SITUACAO != NEW.SITUACAO
+              OR OLD.SIT_SEPAR != NEW.SIT_SEPAR
+              OR OLD.DATA_PEDIDO != NEW.DATA_PEDIDO
+              OR OLD.VENDEDOR != NEW.VENDEDOR
+              OR OLD.SETOR != NEW.SETOR
+              OR OLD.DATA_RECAD != NEW.DATA_RECAD
+              ) THEN
+                INSERT INTO ${databaseEventos}.eventos_pedidos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                VALUES ('cad_orca', NEW.CODIGO, 'UPDATE', 'PENDENTE');
+            END IF;
+        END`,
+        `
+        DROP TRIGGER IF EXISTS ${vendas}.trg_pedidos_insert;
+        `,
+    `CREATE TRIGGER ${vendas}.trg_pedidos_insert
+        AFTER INSERT ON ${vendas}.cad_orca
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_pedidos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('cad_orca', NEW.CODIGO, 'INSERT', 'PENDENTE');
+        END`,
+
+        `
+        DROP TRIGGER IF EXISTS ${vendas}.trg_pedidos_delete;
+        `,
+       
+    `CREATE TRIGGER ${vendas}.trg_pedidos_delete
+        AFTER DELETE ON ${vendas}.cad_orca
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('cad_orca', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`
+
+        
+
 ];
