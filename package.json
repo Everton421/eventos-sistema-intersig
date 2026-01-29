@@ -16,6 +16,8 @@
   "dependencies": {
     "amqplib": "^0.10.9",
     "mysql2": "^3.16.1",
+    "node-cron": "^4.2.1",
+    "node-schedule": "^2.1.1",
     "nodecron": "^0.2.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0"
