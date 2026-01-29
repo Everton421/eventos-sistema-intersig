@@ -113,7 +113,7 @@ export const sqlTriggers = [
         AFTER UPDATE ON ${estoque}.prod_setor
         FOR EACH ROW
         BEGIN
-            IF (NEW.DATA_RECAD <> OLD.DATA_RECAD) THEN
+            IF (NEW.DATA_RECAD <> OLD.DATA_RECAD OR OLD.ESTOQUE <> NEW.ESTOQUE) THEN
                 INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status, setor)
                 VALUES ('prod_setor', NEW.PRODUTO, 'UPDATE', 'PENDENTE', NEW.SETOR);
             END IF;
