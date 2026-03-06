@@ -14,12 +14,8 @@ export async function connectRabbitMQ(): Promise<void> {
         connection = await amqplib.connect(URL);
         pubChannel = await connection.createChannel();
 
-        
         await Promise.all([
-               pubChannel.assertExchange('clientes', 'fanout', { durable: true }),
-               pubChannel.assertExchange('produtos', 'fanout', { durable: true }), 
-               pubChannel.assertExchange('recebimentos', 'fanout', { durable: true }) ,
-               pubChannel.assertExchange('pedidos', 'fanout', { durable: true }) 
+               pubChannel.assertExchange('sistema', 'fanout', { durable: true }),
             
         ])
         console.log("✅ [RabbitMQ] Conectado e Exchange configurada!");

@@ -16,7 +16,7 @@ export const sqlTriggers = [
         FOR EACH ROW
         BEGIN
             IF (OLD.DATA_RECAD != NEW.DATA_RECAD) THEN
-                INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('cad_prod', OLD.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
@@ -28,7 +28,7 @@ export const sqlTriggers = [
         AFTER DELETE ON ${publico}.cad_prod
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_prod', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
         `
@@ -39,7 +39,7 @@ export const sqlTriggers = [
         AFTER INSERT ON ${publico}.cad_prod
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_prod', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
          `
@@ -50,7 +50,7 @@ export const sqlTriggers = [
         AFTER INSERT ON ${publico}.prod_tabprecos
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('prod_tabprecos', NEW.PRODUTO, 'INSERT', 'PENDENTE');
         END`,
         `
@@ -63,7 +63,7 @@ export const sqlTriggers = [
         FOR EACH ROW
         BEGIN
             IF (OLD.PRECO != NEW.PRECO) THEN
-                INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('prod_tabprecos', OLD.PRODUTO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
@@ -75,7 +75,7 @@ export const sqlTriggers = [
         AFTER DELETE ON ${publico}.prod_tabprecos
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('prod_tabprecos', OLD.PRODUTO, 'DELETE', 'PENDENTE');
         END`,
         `
@@ -87,7 +87,7 @@ export const sqlTriggers = [
         FOR EACH ROW
         BEGIN
             IF (NEW.QTDE_SEPARADA <> OLD.QTDE_SEPARADA) THEN
-                INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('pro_orca', NEW.PRODUTO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
@@ -100,7 +100,7 @@ export const sqlTriggers = [
         FOR EACH ROW
         BEGIN
             IF (NEW.QTDE_SEPARADA > 0) THEN
-                INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('pro_orca', NEW.PRODUTO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
@@ -114,7 +114,7 @@ export const sqlTriggers = [
         FOR EACH ROW
         BEGIN
             IF (NEW.DATA_RECAD <> OLD.DATA_RECAD OR OLD.ESTOQUE <> NEW.ESTOQUE) THEN
-                INSERT INTO ${databaseEventos}.eventos_produtos_sistema(tabela_origem, id_registro, tipo_evento, status, setor)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status, setor)
                 VALUES ('prod_setor', NEW.PRODUTO, 'UPDATE', 'PENDENTE', NEW.SETOR);
             END IF;
         END`,
@@ -127,7 +127,7 @@ export const sqlTriggers = [
         FOR EACH ROW
         BEGIN
             IF (OLD.DATA_RECAD != NEW.DATA_RECAD OR OLD.ATIVO != NEW.ATIVO) THEN
-                INSERT INTO ${databaseEventos}.eventos_clientes_sistema(tabela_origem, id_registro, tipo_evento, status)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('cad_clie', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
@@ -139,7 +139,7 @@ export const sqlTriggers = [
         AFTER INSERT ON ${publico}.cad_clie
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_clientes_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_clie', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
@@ -151,7 +151,7 @@ export const sqlTriggers = [
         AFTER DELETE ON ${publico}.cad_clie
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_clientes_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_clie', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
 
@@ -173,7 +173,7 @@ export const sqlTriggers = [
               OR OLD.AGRUP_ORIGEM != NEW.AGRUP_ORIGEM
               OR OLD.AGRUP_DESTINO != NEW.AGRUP_DESTINO
               ) THEN
-                INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('ct_receb', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
@@ -184,7 +184,7 @@ export const sqlTriggers = [
         AFTER INSERT ON ${financeiro}.ct_receb
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('ct_receb', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
@@ -196,7 +196,7 @@ export const sqlTriggers = [
         AFTER DELETE ON ${financeiro}.ct_receb
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('ct_receb', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
 
@@ -215,7 +215,7 @@ export const sqlTriggers = [
               OR OLD.SETOR != NEW.SETOR
               OR OLD.DATA_RECAD != NEW.DATA_RECAD
               ) THEN
-                INSERT INTO ${databaseEventos}.eventos_pedidos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('cad_orca', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
@@ -226,7 +226,7 @@ export const sqlTriggers = [
         AFTER INSERT ON ${vendas}.cad_orca
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_pedidos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_orca', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
@@ -238,7 +238,7 @@ export const sqlTriggers = [
         AFTER DELETE ON ${vendas}.cad_orca
         FOR EACH ROW
         BEGIN
-            INSERT INTO ${databaseEventos}.eventos_recebimentos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_orca', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`
 

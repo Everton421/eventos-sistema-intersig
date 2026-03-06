@@ -1,6 +1,3 @@
-import dbConn from "../../connection/database-connection.ts";
-
- 
 
         const databaseEventos = `\`${process.env.EVENTOS}\``;
 
@@ -8,8 +5,8 @@ import dbConn from "../../connection/database-connection.ts";
         `
          CREATE DATABASE IF NOT EXISTS${databaseEventos}; 
         `,
-         `
-         CREATE TABLE IF NOT EXISTS ${databaseEventos}.eventos_produtos_sistema (
+          `
+         CREATE TABLE IF NOT EXISTS ${databaseEventos}.eventos_sistema (
              id  int(11) NOT NULL AUTO_INCREMENT,
              tabela_origem  varchar(50) DEFAULT NULL,
              id_registro  int(11) DEFAULT NULL,
@@ -22,46 +19,23 @@ import dbConn from "../../connection/database-connection.ts";
              criado_em  timestamp NULL DEFAULT current_timestamp(),
             PRIMARY KEY ( id )
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci; `,
-    
-            `
-            CREATE TABLE IF NOt EXISTS ${databaseEventos}.eventos_clientes_sistema  (
-             id  int(11) NOT NULL AUTO_INCREMENT,
-             tabela_origem  varchar(50) DEFAULT NULL,
-             id_registro  int(11) DEFAULT NULL,
-             tipo_evento  enum('INSERT','UPDATE','DELETE') NOT NULL DEFAULT 'INSERT',
-             dados_json  blob DEFAULT NULL,
-             status  enum('PENDENTE','PROCESSADO','ERRO') DEFAULT 'PENDENTE',
-             id_message  varchar(255) DEFAULT NULL,
-             criado_em  timestamp NULL DEFAULT current_timestamp(),
-            PRIMARY KEY (id )
-            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-            `,
-            `
-            CREATE TABLE IF NOt EXISTS ${databaseEventos}.eventos_recebimentos_sistema  (
-             id  int(11) NOT NULL AUTO_INCREMENT,
-             tabela_origem  varchar(50) DEFAULT NULL,
-             id_registro  int(11) DEFAULT NULL,
-             tipo_evento  enum('INSERT','UPDATE','DELETE') NOT NULL DEFAULT 'INSERT',
-             dados_json  blob DEFAULT NULL,
-             status  enum('PENDENTE','PROCESSADO','ERRO') DEFAULT 'PENDENTE',
-             id_message  varchar(255) DEFAULT NULL,
-             criado_em  timestamp NULL DEFAULT current_timestamp(),
-            PRIMARY KEY (id )
-            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-            `  ,
-            `
-            CREATE TABLE IF NOt EXISTS ${databaseEventos}.eventos_pedidos_sistema  (
-             id  int(11) NOT NULL AUTO_INCREMENT,
-             tabela_origem  varchar(50) DEFAULT NULL,
-             id_registro  int(11) DEFAULT NULL,
-             tipo_evento  enum('INSERT','UPDATE','DELETE') NOT NULL DEFAULT 'INSERT',
-             dados_json  blob DEFAULT NULL,
-             status  enum('PENDENTE','PROCESSADO','ERRO') DEFAULT 'PENDENTE',
-             id_message  varchar(255) DEFAULT NULL,
-             criado_em  timestamp NULL DEFAULT current_timestamp(),
-            PRIMARY KEY (id )
-            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-            `
+
+            `CREATE TABLE IF NOT EXISTS ${databaseEventos}.logs  (
+                 id  int(11) NOT NULL AUTO_INCREMENT,
+                 status  varchar(255) DEFAULT NULL,
+                 id_message  varchar(255) DEFAULT NULL,
+                 id_registro  int(11) DEFAULT NULL,
+                 dados_sql  blob DEFAULT NULL,
+                 detalhes_erro  varchar(255) DEFAULT '0',
+                 detalhes  varchar(255) DEFAULT '0',
+                 tabela_origem  varchar(50) DEFAULT NULL,
+                 tipo_evento  enum('INSERT','UPDATE','DELETE') NOT NULL DEFAULT 'INSERT',
+                 criado_em  timestamp NULL DEFAULT current_timestamp(),
+                PRIMARY KEY ( id )
+            ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+             `
+     
         ] 
 
 

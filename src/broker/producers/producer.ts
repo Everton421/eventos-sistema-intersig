@@ -19,8 +19,8 @@ export async function dispathExchange(exchangeName: string, data: message) {
                                                                          dados_sql ="",
                                                                          detalhes_erro ="${e}",
                                                                          detalhes = "Erro ao tentar enviar mensagem para a exchange: ${exchangeName} " ,
-                                                                             tabela_origem = '${data.tabela_origem}',
-                                                                             tipo_evento = '${data.tipo_evento}'
+                                                                          tabela_origem = '${data.tabela_origem}',
+                                                                          tipo_evento = '${data.tipo_evento}'
                                                                          ;`
         await dbConn.query(sqlLog);
 
