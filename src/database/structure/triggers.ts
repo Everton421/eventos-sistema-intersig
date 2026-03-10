@@ -109,6 +109,19 @@ export const sqlTriggers = [
         `,
 
     // 9. Prod Setor UPDATE
+      `  DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_insert;`,
+
+        `CREATE TRIGGER ${estoque}.trg_prod_setor_insert
+        AFTER INSERT ON ${estoque}.prod_setor
+            FOR EACH ROW
+          BEGIN
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                VALUES ('prod_setor', NEW.PRODUTO, 'INSERT', 'PENDENTE');
+        END`,
+          
+      `  DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_update;`,
+        
+
     `CREATE TRIGGER ${estoque}.trg_prod_setor_update
         AFTER UPDATE ON ${estoque}.prod_setor
         FOR EACH ROW
