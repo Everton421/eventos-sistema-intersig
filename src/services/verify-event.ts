@@ -23,7 +23,7 @@ setInterval( async ()=>{
                for(const i of data ){
                     const id_message = randomUUID() as string;
                     const resultMsg =  await dispathExchange(
-                         'sistema',
+                         
                          {
                               id_message: id_message,
                               criado_em: i.criado_em,

@@ -4,10 +4,12 @@ import { publishExchangeMessage } from "../broker-connection.ts";
 
 
 
-export async function dispathExchange(exchangeName: string, data: message) {
+export async function dispathExchange(  data: message) {
+    const exchange = process.env.EXCHANGE;
+    
     try {
 
-        const result = await publishExchangeMessage(exchangeName, '', data)
+        const result = await publishExchangeMessage(exchange, '', data)
         return result;
 
     } catch (e) {
@@ -18,7 +20,7 @@ export async function dispathExchange(exchangeName: string, data: message) {
                                                                          id_registro ='${data.id_registro}',
                                                                          dados_sql ="",
                                                                          detalhes_erro ="${e}",
-                                                                         detalhes = "Erro ao tentar enviar mensagem para a exchange: ${exchangeName} " ,
+                                                                         detalhes = "Erro ao tentar enviar mensagem para a exchange: ${exchange} " ,
                                                                           tabela_origem = '${data.tabela_origem}',
                                                                           tipo_evento = '${data.tipo_evento}'
                                                                          ;`

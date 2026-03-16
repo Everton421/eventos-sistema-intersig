@@ -4,6 +4,7 @@ let connection: ChannelModel | null = null;
   let pubChannel:   Channel | null = null;
 
 const URL = process.env.BROKER_URL;
+const exchange = process.env.EXCHANGE;
 
 export async function connectRabbitMQ(): Promise<void> {
     if (!URL) throw new Error("BROKER_URL não definido.");
@@ -15,10 +16,10 @@ export async function connectRabbitMQ(): Promise<void> {
         pubChannel = await connection.createChannel();
 
         await Promise.all([
-               pubChannel.assertExchange('sistema', 'fanout', { durable: true }),
+               pubChannel.assertExchange(exchange!, 'fanout', { durable: true }),
             
         ])
-        console.log("✅ [RabbitMQ] Conectado e Exchange configurada!");
+        console.log(`✅ [RabbitMQ] Conectado e exchange ${exchange}  configurada!`);
 
         connection.on('error', (err) => {
             console.error("❌ [RabbitMQ] Erro na conexão:", err.message);
