@@ -6,7 +6,6 @@ export async function seed( ) {
     for( const i of sqlTables){
         try{
         const [rows ] = await dbConn.query(i)
-        console.log(rows);
         }catch(e){
             console.log(e)
             continue;
@@ -16,7 +15,6 @@ export async function seed( ) {
         try{
 
         const [rows ] = await dbConn.query(i)
-        console.log(rows);
         }catch(e){
             console.log(e)
             continue;
