@@ -1,9 +1,9 @@
 import   mysql  from 'mysql2/promise';
 
-export const DB_PUBLICO = process.env.PUBLICO
-export const DB_VENDAS = process.env.VENDAS
-export const DB_ESTOQUE = process.env.ESTOQUE
-export const DB_FINANCEIRO = process.env.FINANCEIRO
+export const PUBLICO = process.env.DB_PUBLICO
+export const VENDAS = process.env.DB_VENDAS
+export const ESTOQUE = process.env.DB_ESTOQUE
+export const FINANCEIRO = process.env.DB_FINANCEIRO
 
     
 const DB_CONFIG = { 

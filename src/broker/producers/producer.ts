@@ -5,7 +5,7 @@ import { publishExchangeMessage } from "../broker-connection.ts";
 
 
 export async function dispathExchange(  data: message) {
-    const exchange = process.env.EXCHANGE;
+    const exchange = process.env.EXCHANGE!;
     
     try {
 
