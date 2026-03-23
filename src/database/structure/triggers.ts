@@ -1,6 +1,6 @@
-import { ESTOQUE, FINANCEIRO, PUBLICO, VENDAS } from "../../connection/database-connection.ts";
+import { databaseEventos, ESTOQUE, FINANCEIRO, PUBLICO, VENDAS } from "../../connection/database-connection.ts";
 
-const databaseEventos = `\`${process.env.EVENTOS}\``;
+ 
 const publico = `\`${PUBLICO}\``;
 const vendas = `\`${VENDAS}\``;
 const estoque = `\`${ESTOQUE}\``;
