@@ -11,10 +11,10 @@ module.exports = {
         "--env-file=.env",
         "--experimental-strip-types"
       ],
-      exec_mode: "fork",
+      exec_mode: "cluster",
       watch: false,
-      max_memory_restart: "1G",
-      instances: 1,
+      max_memory_restart: "250GM",
+      instances: 2,
       autorestart: true,
       restart_delay: 5000,
       out_file: "logs/logs-out.log",
