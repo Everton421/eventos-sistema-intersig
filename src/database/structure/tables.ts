@@ -1,5 +1,5 @@
+import { databaseEventos } from "../../connection/database-connection.ts";
 
-        const databaseEventos = `\`${process.env.EVENTOS}\``;
 
     export const sqlTables = [
         `
