@@ -11,9 +11,9 @@ module.exports = {
         "--env-file=.env",
         "--experimental-strip-types"
       ],
-      exec_mode: "cluster",
+      exec_mode: "fork",
       watch: false,
-      max_memory_restart: "200M",
+      max_memory_restart: "250M",
       instances: 2,
       autorestart: true,
       restart_delay: 5000,
