@@ -276,6 +276,29 @@ export const sqlTriggers = [
             VALUES ('cad_orca', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
 
+        ///////////////////
+    `  DROP TRIGGER IF EXISTS ${vendas}.trg_notas_update;`,
+ `CREATE TRIGGER ${vendas}.trg_notas_update
+        AFTER UPDATE ON ${vendas}.cad_nf
+        FOR EACH ROW
+        BEGIN
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                VALUES ('cad_nf', NEW.CODIGO, 'UPDATE', 'PENDENTE');
+            
+        END`,
+        `
+        DROP TRIGGER IF EXISTS ${vendas}.trg_notas_insert ;
+        `,
+    `CREATE TRIGGER ${vendas}.trg_notas_insert
+        AFTER INSERT ON ${vendas}.cad_nf
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('cad_nf', NEW.CODIGO, 'INSERT', 'PENDENTE');
+        END`,
+
+        //////////////////////
+
         /// trigger grupos
         
         ` DROP TRIGGER IF EXISTS ${publico}.trg_grupos_insert;`,
