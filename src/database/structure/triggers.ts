@@ -15,10 +15,9 @@ export const sqlTriggers = [
         AFTER UPDATE ON ${publico}.cad_prod
         FOR EACH ROW
         BEGIN
-            IF (OLD.DATA_RECAD != NEW.DATA_RECAD) THEN
                 INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('cad_prod', OLD.CODIGO, 'UPDATE', 'PENDENTE');
-            END IF;
+         
         END`,
         `
         DROP TRIGGER IF EXISTS ${publico}.trg_produtos_delete;
@@ -168,6 +167,43 @@ export const sqlTriggers = [
             VALUES ('cad_clie', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
 
+        // trigger fornecedores
+  `
+        DROP TRIGGER IF EXISTS ${publico}.trg_cad_forn_update;
+        `,
+    `CREATE TRIGGER ${publico}.trg_cad_forn_update
+        AFTER UPDATE ON ${publico}.cad_forn
+        FOR EACH ROW
+        BEGIN
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                VALUES ('cad_forn', NEW.CODIGO, 'UPDATE', 'PENDENTE');
+        END`,
+         `
+        DROP TRIGGER IF EXISTS ${publico}.trg_cad_forn_insert;
+        `,
+     `CREATE TRIGGER ${publico}.trg_cad_forn_insert
+        AFTER INSERT ON ${publico}.cad_forn
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('cad_forn', NEW.CODIGO, 'INSERT', 'PENDENTE');
+        END`,
+
+        `
+        DROP TRIGGER IF EXISTS ${publico}.trg_cad_forn_delete;
+        `,
+       
+    `CREATE TRIGGER ${publico}.trg_cad_forn_delete
+        AFTER DELETE ON ${publico}.cad_forn
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('cad_forn', OLD.CODIGO, 'DELETE', 'PENDENTE');
+        END`,
+
+
+        //
+
   `
         DROP TRIGGER IF EXISTS ${estoque}.trg_setores_update;
         `,
@@ -275,6 +311,49 @@ export const sqlTriggers = [
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_orca', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
+////////////////////////////////////////////////////////////////////////////
+
+        // pedidos  de compra 
+    `  DROP TRIGGER IF EXISTS ${vendas}.trg_comp_update;`,
+ `CREATE TRIGGER ${vendas}.trg_comp_update
+        AFTER UPDATE ON ${vendas}.cad_comp
+        FOR EACH ROW
+        BEGIN
+            IF (
+              OLD.FORNECEDOR != NEW.FORNECEDOR
+              OR OLD.SITUACAO != NEW.SITUACAO
+              OR OLD.SIT_SEPAR != NEW.SIT_SEPAR
+              OR OLD.DATA_PEDIDO != NEW.DATA_PEDIDO
+              OR OLD.COMPRADOR != NEW.COMPRADOR
+              OR OLD.SETOR != NEW.SETOR
+              ) THEN
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                VALUES ('cad_comp', NEW.CODIGO, 'UPDATE', 'PENDENTE');
+            END IF;
+        END`,
+        `
+        DROP TRIGGER IF EXISTS ${vendas}.trg_comp_insert;
+        `,
+    `CREATE TRIGGER ${vendas}.trg_comp_insert
+        AFTER INSERT ON ${vendas}.cad_comp
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('cad_comp', NEW.CODIGO, 'INSERT', 'PENDENTE');
+        END`,
+
+        `
+        DROP TRIGGER IF EXISTS ${vendas}.trg_comp_delete;
+        `,
+       
+    `CREATE TRIGGER ${vendas}.trg_comp_delete
+        AFTER DELETE ON ${vendas}.cad_comp
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('cad_comp', OLD.CODIGO, 'DELETE', 'PENDENTE');
+        END`,
+//////////////////////////////////////////////////////////////////
 
         ///////////////////
     `  DROP TRIGGER IF EXISTS ${vendas}.trg_notas_update;`,
