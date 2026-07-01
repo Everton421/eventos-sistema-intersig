@@ -1,13 +1,13 @@
 import { databaseEventos, ESTOQUE, FINANCEIRO, PUBLICO, VENDAS } from "../../connection/database-connection.ts";
 
- 
+
 const publico = `\`${PUBLICO}\``;
 const vendas = `\`${VENDAS}\``;
 const estoque = `\`${ESTOQUE}\``;
 const financeiro = `\`${FINANCEIRO}\``
 
 export const sqlTriggers = [
-      `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_produtos_update;
         `,
     // 1. Produtos UPDATE
@@ -19,7 +19,7 @@ export const sqlTriggers = [
                 VALUES ('cad_prod', OLD.CODIGO, 'UPDATE', 'PENDENTE');
          
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_produtos_delete;
         `,
     // 2. Produtos DELETE
@@ -30,7 +30,7 @@ export const sqlTriggers = [
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_prod', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_produtos_insert;
         `,
     // 3. Produtos INSERT
@@ -41,7 +41,7 @@ export const sqlTriggers = [
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_prod', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
-         `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_preco_produto_insert;
         `,
     // 4. Preço Produto INSERT
@@ -52,7 +52,7 @@ export const sqlTriggers = [
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('prod_tabprecos', NEW.PRODUTO, 'INSERT', 'PENDENTE');
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_preco_produto_update;
         `,
 
@@ -66,7 +66,7 @@ export const sqlTriggers = [
                 VALUES ('prod_tabprecos', OLD.PRODUTO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_preco_produto_delete;
         `,
     // 6. Preço Produto DELETE
@@ -77,7 +77,7 @@ export const sqlTriggers = [
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('prod_tabprecos', OLD.PRODUTO, 'DELETE', 'PENDENTE');
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${vendas}.trg_pro_orca_update;
         `,
     // 7. Pro Orca UPDATE (Separação)
@@ -90,7 +90,7 @@ export const sqlTriggers = [
                 VALUES ('pro_orca', NEW.PRODUTO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
-         `
+    `
         DROP TRIGGER IF EXISTS ${vendas}.trg_pro_orca_insert;
         `,
     // 8. Pro Orca INSERT
@@ -103,23 +103,23 @@ export const sqlTriggers = [
                 VALUES ('pro_orca', NEW.PRODUTO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
-          `
+    `
         DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_update;
         `,
 
     // 9. Prod Setor UPDATE
-      `  DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_insert;`,
+    `  DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_insert;`,
 
-        `CREATE TRIGGER ${estoque}.trg_prod_setor_insert
+    `CREATE TRIGGER ${estoque}.trg_prod_setor_insert
         AFTER INSERT ON ${estoque}.prod_setor
             FOR EACH ROW
           BEGIN
                 INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('prod_setor', NEW.PRODUTO, 'INSERT', 'PENDENTE');
         END`,
-          
-      `  DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_update;`,
-        
+
+    `  DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_update;`,
+
 
     `CREATE TRIGGER ${estoque}.trg_prod_setor_update
         AFTER UPDATE ON ${estoque}.prod_setor
@@ -130,7 +130,7 @@ export const sqlTriggers = [
                 VALUES ('prod_setor', NEW.PRODUTO, 'UPDATE', 'PENDENTE', NEW.SETOR);
             END IF;
         END`,
-         `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_cad_clie_update;
         `,
     // 10. Clientes UPDATE
@@ -143,7 +143,7 @@ export const sqlTriggers = [
                 VALUES ('cad_clie', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
-         `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_cad_clie_insert;
         `,
     // 11. Clientes INSERT (CORRIGIDO: estava AFTER UPDATE)
@@ -155,10 +155,10 @@ export const sqlTriggers = [
             VALUES ('cad_clie', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-        `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_cad_clie_delete;
         `,
-       
+
     `CREATE TRIGGER ${publico}.trg_cad_clie_delete
         AFTER DELETE ON ${publico}.cad_clie
         FOR EACH ROW
@@ -167,8 +167,8 @@ export const sqlTriggers = [
             VALUES ('cad_clie', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
 
-        // trigger fornecedores
-  `
+    // trigger fornecedores
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_cad_forn_update;
         `,
     `CREATE TRIGGER ${publico}.trg_cad_forn_update
@@ -178,10 +178,10 @@ export const sqlTriggers = [
                 INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                 VALUES ('cad_forn', NEW.CODIGO, 'UPDATE', 'PENDENTE');
         END`,
-         `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_cad_forn_insert;
         `,
-     `CREATE TRIGGER ${publico}.trg_cad_forn_insert
+    `CREATE TRIGGER ${publico}.trg_cad_forn_insert
         AFTER INSERT ON ${publico}.cad_forn
         FOR EACH ROW
         BEGIN
@@ -189,10 +189,10 @@ export const sqlTriggers = [
             VALUES ('cad_forn', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-        `
+    `
         DROP TRIGGER IF EXISTS ${publico}.trg_cad_forn_delete;
         `,
-       
+
     `CREATE TRIGGER ${publico}.trg_cad_forn_delete
         AFTER DELETE ON ${publico}.cad_forn
         FOR EACH ROW
@@ -202,9 +202,9 @@ export const sqlTriggers = [
         END`,
 
 
-        //
+    //
 
-  `
+    `
         DROP TRIGGER IF EXISTS ${estoque}.trg_setores_update;
         `,
     //     SETORES  UPDATE
@@ -216,21 +216,21 @@ export const sqlTriggers = [
                 VALUES ('setores', NEW.CODIGO, 'UPDATE', 'PENDENTE' );
         END`,
 
-        ` DROP TRIGGER IF EXISTS ${estoque}.trg_setores_insert; `,
+    ` DROP TRIGGER IF EXISTS ${estoque}.trg_setores_insert; `,
 
-         `CREATE TRIGGER ${estoque}.trg_setores_insert
+    `CREATE TRIGGER ${estoque}.trg_setores_insert
         AFTER INSERT ON ${estoque}.setores
         FOR EACH ROW
         BEGIN
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('setores', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
-          
+
     /// trigger recebimentos
-     `
+    `
       DROP TRIGGER IF EXISTS ${financeiro}.trg_ct_receb_update;
      `,
- `CREATE TRIGGER ${financeiro}.trg_ct_receb_update
+    `CREATE TRIGGER ${financeiro}.trg_ct_receb_update
         AFTER UPDATE ON ${financeiro}.ct_receb
         FOR EACH ROW
         BEGIN
@@ -247,7 +247,7 @@ export const sqlTriggers = [
                 VALUES ('ct_receb', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${financeiro}.trg_ct_receb_insert;
         `,
     `CREATE TRIGGER ${financeiro}.trg_ct_receb_insert
@@ -258,10 +258,10 @@ export const sqlTriggers = [
             VALUES ('ct_receb', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-        `
+    `
         DROP TRIGGER IF EXISTS ${financeiro}.trg_ct_receb_delete;
         `,
-       
+
     `CREATE TRIGGER ${financeiro}.trg_ct_receb_delete
         AFTER DELETE ON ${financeiro}.ct_receb
         FOR EACH ROW
@@ -270,9 +270,9 @@ export const sqlTriggers = [
             VALUES ('ct_receb', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
 
-// pedidos  
+    // pedidos  
     `  DROP TRIGGER IF EXISTS ${vendas}.trg_pedidos_update;`,
- `CREATE TRIGGER ${vendas}.trg_pedidos_update
+    `CREATE TRIGGER ${vendas}.trg_pedidos_update
         AFTER UPDATE ON ${vendas}.cad_orca
         FOR EACH ROW
         BEGIN
@@ -289,7 +289,7 @@ export const sqlTriggers = [
                 VALUES ('cad_orca', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${vendas}.trg_pedidos_insert;
         `,
     `CREATE TRIGGER ${vendas}.trg_pedidos_insert
@@ -300,10 +300,10 @@ export const sqlTriggers = [
             VALUES ('cad_orca', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-        `
+    `
         DROP TRIGGER IF EXISTS ${vendas}.trg_pedidos_delete;
         `,
-       
+
     `CREATE TRIGGER ${vendas}.trg_pedidos_delete
         AFTER DELETE ON ${vendas}.cad_orca
         FOR EACH ROW
@@ -311,11 +311,11 @@ export const sqlTriggers = [
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_orca', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
-////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
 
-        // pedidos  de compra 
+    // pedidos  de compra 
     `  DROP TRIGGER IF EXISTS ${vendas}.trg_comp_update;`,
- `CREATE TRIGGER ${vendas}.trg_comp_update
+    `CREATE TRIGGER ${vendas}.trg_comp_update
         AFTER UPDATE ON ${vendas}.cad_comp
         FOR EACH ROW
         BEGIN
@@ -331,7 +331,7 @@ export const sqlTriggers = [
                 VALUES ('cad_comp', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END IF;
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${vendas}.trg_comp_insert;
         `,
     `CREATE TRIGGER ${vendas}.trg_comp_insert
@@ -342,10 +342,10 @@ export const sqlTriggers = [
             VALUES ('cad_comp', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-        `
+    `
         DROP TRIGGER IF EXISTS ${vendas}.trg_comp_delete;
         `,
-       
+
     `CREATE TRIGGER ${vendas}.trg_comp_delete
         AFTER DELETE ON ${vendas}.cad_comp
         FOR EACH ROW
@@ -353,11 +353,11 @@ export const sqlTriggers = [
             INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
             VALUES ('cad_comp', OLD.CODIGO, 'DELETE', 'PENDENTE');
         END`,
-//////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////
 
-        ///////////////////
+    ///////////////////
     `  DROP TRIGGER IF EXISTS ${vendas}.trg_notas_update;`,
- `CREATE TRIGGER ${vendas}.trg_notas_update
+    `CREATE TRIGGER ${vendas}.trg_notas_update
         AFTER UPDATE ON ${vendas}.cad_nf
         FOR EACH ROW
         BEGIN
@@ -365,7 +365,7 @@ export const sqlTriggers = [
                 VALUES ('cad_nf', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             
         END`,
-        `
+    `
         DROP TRIGGER IF EXISTS ${vendas}.trg_notas_insert ;
         `,
     `CREATE TRIGGER ${vendas}.trg_notas_insert
@@ -376,12 +376,12 @@ export const sqlTriggers = [
             VALUES ('cad_nf', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-        //////////////////////
+    ////////////
 
-        /// trigger grupos
-        
-        ` DROP TRIGGER IF EXISTS ${publico}.trg_grupos_insert;`,
-       
+    ///// trigger grupos
+
+    ` DROP TRIGGER IF EXISTS ${publico}.trg_grupos_insert;`,
+
     `CREATE TRIGGER ${publico}.trg_grupos_insert
         AFTER INSERT  ON ${publico}.cad_pgru
         FOR EACH ROW
@@ -390,9 +390,9 @@ export const sqlTriggers = [
             VALUES ('cad_pgru', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-      ` DROP TRIGGER IF EXISTS ${publico}.trg_grupos_update;`,
-       
-        `CREATE TRIGGER ${publico}.trg_grupos_update
+    ` DROP TRIGGER IF EXISTS ${publico}.trg_grupos_update;`,
+
+    `CREATE TRIGGER ${publico}.trg_grupos_update
             AFTER UPDATE  ON ${publico}.cad_pgru
             FOR EACH ROW
             BEGIN
@@ -400,21 +400,21 @@ export const sqlTriggers = [
                 VALUES ('cad_pgru', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END`,
 
-            
-        `  DROP TRIGGER IF EXISTS ${publico}.trg_grupos_delete; `,
-       
-            `CREATE TRIGGER ${publico}.trg_grupos_delete
+
+    `  DROP TRIGGER IF EXISTS ${publico}.trg_grupos_delete; `,
+
+    `CREATE TRIGGER ${publico}.trg_grupos_delete
                 AFTER DELETE ON ${publico}.cad_pgru
                 FOR EACH ROW
                 BEGIN
                     INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                     VALUES ('cad_pgru', OLD.CODIGO, 'DELETE', 'PENDENTE');
                 END`,
+    ////////////
+    ///// marcas
 
-                // trigger marcas
-                     
-        ` DROP TRIGGER IF EXISTS ${publico}.trg_marcas_insert;`,
-       
+    ` DROP TRIGGER IF EXISTS ${publico}.trg_marcas_insert;`,
+
     `CREATE TRIGGER ${publico}.trg_marcas_insert
         AFTER INSERT  ON ${publico}.cad_pmar
         FOR EACH ROW
@@ -423,9 +423,9 @@ export const sqlTriggers = [
             VALUES ('cad_pmar', NEW.CODIGO, 'INSERT', 'PENDENTE');
         END`,
 
-      ` DROP TRIGGER IF EXISTS ${publico}.trg_marcas_update;`,
-       
-        `CREATE TRIGGER ${publico}.trg_marcas_update
+    ` DROP TRIGGER IF EXISTS ${publico}.trg_marcas_update;`,
+
+    `CREATE TRIGGER ${publico}.trg_marcas_update
             AFTER UPDATE  ON ${publico}.cad_pmar
             FOR EACH ROW
             BEGIN
@@ -433,15 +433,83 @@ export const sqlTriggers = [
                 VALUES ('cad_pmar', NEW.CODIGO, 'UPDATE', 'PENDENTE');
             END`,
 
-            
-        `  DROP TRIGGER IF EXISTS ${publico}.trg_marcas_delete; `,
-       
-            `CREATE TRIGGER ${publico}.trg_marcas_delete
+
+    `  DROP TRIGGER IF EXISTS ${publico}.trg_marcas_delete; `,
+
+    `CREATE TRIGGER ${publico}.trg_marcas_delete
                 AFTER DELETE ON ${publico}.cad_pmar
                 FOR EACH ROW
                 BEGIN
                     INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
                     VALUES ('cad_pmar', OLD.CODIGO, 'DELETE', 'PENDENTE');
                 END`,
+    /////////
 
+    ///// lotes series
+
+    ` DROP TRIGGER IF EXISTS ${publico}.trg_lotes_series_insert;`,
+
+    `CREATE TRIGGER ${publico}.trg_lotes_series_insert
+        AFTER INSERT  ON ${publico}.lotes_series
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+            VALUES ('lotes_series', NEW.CODIGO, 'INSERT', 'PENDENTE');
+     END`,
+
+    ` DROP TRIGGER IF EXISTS ${publico}.trg_lotes_series_update;`,
+
+    `CREATE TRIGGER ${publico}.trg_lotes_series_update
+            AFTER UPDATE  ON ${publico}.lotes_series
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                VALUES ('lotes_series', NEW.CODIGO, 'UPDATE', 'PENDENTE');
+          END`,
+
+
+    `  DROP TRIGGER IF EXISTS ${publico}.trg_lotes_series_delete; `,
+
+    `CREATE TRIGGER ${publico}.trg_lotes_series_delete
+                AFTER DELETE ON ${publico}.lotes_series
+                FOR EACH ROW
+                BEGIN
+                    INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
+                    VALUES ('lotes_series', OLD.CODIGO, 'DELETE', 'PENDENTE');
+                END`,
+    ///////
+
+    ///// lote serie setor 
+
+    ` DROP TRIGGER IF EXISTS ${estoque}.trg_lote_serie_setor_insert;`,
+
+    `CREATE TRIGGER ${estoque}.trg_lote_serie_setor_insert
+        AFTER INSERT  ON ${estoque}.lote_serie_setor
+        FOR EACH ROW
+        BEGIN
+            INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status, setor)
+            VALUES ('lote_serie_setor', NEW.id, 'INSERT', 'PENDENTE', NEW.SETOR);
+     END`,
+
+    ` DROP TRIGGER IF EXISTS ${estoque}.trg_lote_serie_setor_update;`,
+
+    `CREATE TRIGGER ${estoque}.trg_lote_serie_setor_update
+            AFTER UPDATE  ON ${estoque}.lote_serie_setor
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status,setor)
+                VALUES ('lote_serie_setor', NEW.id, 'UPDATE', 'PENDENTE', NEW.SETOR);
+          END`,
+
+
+    `  DROP TRIGGER IF EXISTS ${estoque}.trg_lote_serie_setor_delete; `,
+
+    `CREATE TRIGGER ${estoque}.trg_lote_serie_setor_delete
+                AFTER DELETE ON ${estoque}.lote_serie_setor
+                FOR EACH ROW
+                BEGIN
+                    INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status,setor)
+                    VALUES ('lote_serie_setor', OLD.id, 'DELETE', 'PENDENTE', OLD.SETOR);
+                END`,
+    ///////
 ];
