@@ -103,8 +103,8 @@ export const sqlTriggers = [
         AFTER INSERT ON ${estoque}.prod_setor
             FOR EACH ROW
           BEGIN
-                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status)
-                VALUES ('prod_setor', NEW.PRODUTO, 'INSERT', 'PENDENTE');
+                INSERT INTO ${databaseEventos}.eventos_sistema(tabela_origem, id_registro, tipo_evento, status, setor)
+                VALUES ('prod_setor', NEW.PRODUTO, 'INSERT', 'PENDENTE', NEW.SETOR);
         END`,
     `  DROP TRIGGER IF EXISTS ${estoque}.trg_prod_setor_update;`,
     `CREATE TRIGGER ${estoque}.trg_prod_setor_update
