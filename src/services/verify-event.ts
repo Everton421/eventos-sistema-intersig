@@ -32,7 +32,8 @@ setInterval( async ()=>{
                               id_registro: Number(i.id_registro),
                               status: i.status,
                               tabela_origem: i.tabela_origem,
-                              tipo_evento: i.tipo_evento
+                              tipo_evento: i.tipo_evento,
+                              setor:i.setor
                          })
 
                          if(resultMsg){

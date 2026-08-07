@@ -11,4 +11,5 @@ export interface message {
     dados_json: string
     status: 'PENDENTE' | 'PROCESSADO' | 'ERRO'
     criado_em: string
+    setor:number
 }

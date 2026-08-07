@@ -7,4 +7,5 @@ export interface eventos_clientes_sistema
     dados_json: string
     status: 'PENDENTE' | 'PROCESSADO' | 'ERRO'
     criado_em: string
+    setor:number
 }
