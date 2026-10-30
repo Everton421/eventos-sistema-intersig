@@ -1,6 +1,6 @@
 import dbConn from "../../connection/database-connection.ts";
 import { sqlTables } from "../structure/tables.ts";
-import { sqlTriggers } from "../structure/triggers.ts";
+import { getTriggerStatements } from "../structure/triggers.ts";
 
 export async function seed( ) {
     for( const i of sqlTables){
@@ -11,7 +11,7 @@ export async function seed( ) {
             continue;
         }
     }
-    for( const i of sqlTriggers){
+    for( const i of getTriggerStatements()){
         try{
 
         const [rows ] = await dbConn.query(i)
